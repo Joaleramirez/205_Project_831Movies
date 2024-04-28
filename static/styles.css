@@ -1,0 +1,89 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #101010;
+    color: #fff;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    height: 100vh;
+    background-image: url('{{ url_for('static', filename='background.jpg') }}');
+    background-size: cover;
+    background-position: center;
+}
+
+.animated-title {
+    font-size: 75px;
+    color: #FF0000; 
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow:
+        0 0 3px #ff6666,
+        0 0 8px #ff6666,
+        0 0 13px #ff3333,
+        0 0 18px #ff3333;
+    animation: fadeInDrop 2s ease forwards, neonGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neonGlow {
+    from {
+        text-shadow:
+            0 0 3px #ff6666,
+            0 0 8px #ff6666,
+            0 0 13px #ff3333,
+            0 0 18px #ff3333;
+    }
+    to {
+        text-shadow:
+            0 0 2px #ff6666,
+            0 0 5px #ff6666,
+            0 0 10px #ff3333,
+            0 0 15px #ff3333;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 360px;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #E50914;
+    color: white;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #f40612;
+}
+
+a {
+    color: #c6c6c6;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #E50914;
+}
+
+p {
+    text-align: center;
+    margin-top: 20px;
+}
