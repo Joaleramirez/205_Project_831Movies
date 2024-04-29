@@ -9,7 +9,7 @@
   
     <link rel="stylesheet" type="text/css" href="/css/styles.css" />
 
-    <title>Home Page</title>
+    <title>Search</title>
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> -->
 </head>
 <body>
@@ -49,9 +49,13 @@
 
 
     <center>
-        <h1>Welcome to the Home Page!</h1>
-        <p>Hello, {{ username }}! Welcome back.</p>
-        <a href="{{ url_for('logout') }}">Logout</a>
+        <h1>Welcome to the My List Page!</h1>
+        <br>
+        <form method="post">
+            <input type="text" name="searchName" required><br>
+        <input class="btn btn-primary" type="submit" value="Search">
+        </form>
+
     </center>
 </body>
 </html>
