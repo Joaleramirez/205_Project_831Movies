@@ -71,6 +71,18 @@ def home():
     else:
         flash("User not found, please log in again.")
         return redirect(url_for('logout'))
+    
+@app.route('/search')
+def search():
+    return render_template('search.html')
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+@app.route('/mylist')
+def mylist():
+    return render_template('mylist.html')
 
 @app.route('/logout')
 def logout():
