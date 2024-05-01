@@ -78,7 +78,15 @@ def search():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user = User.query.get(session['user_id'])
+    if user:
+        return render_template('profile.html', username=user.username)
+    else:
+        flash("User not found, please log in again.")
+        return redirect(url_for('logout'))
+    
 
 @app.route('/mylist')
 def mylist():
