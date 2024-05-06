@@ -1,6 +1,29 @@
-from flask import Flask, request, render_template, redirect, url_for, flash, session
+from flask import Flask, request, render_template, redirect, url_for, flash, session, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+import requests, json
+from pprint import pprint
+
+
+
+my_key = '8c5606f4'
+
+endpoint = 'http://www.omdbapi.com/'
+
+movie_title = input("Enter a title of a movie:") # input
+
+payload = {
+    'apikey': my_key,
+    't': movie_title, # Movie Title
+    'plot':'full'  #get exact movie
+}
+try:
+    r = requests.get(endpoint, params=payload)
+    data = r.json()
+    pprint(data)
+except:
+    print('please try again')
+# api key if you need to look up info, copy paste to browser: http://www.omdbapi.com/?i=tt3896198&apikey=8c5606f4
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -71,8 +94,8 @@ def home():
     else:
         flash("User not found, please log in again.")
         return redirect(url_for('logout'))
-    
-@app.route('/search')
+#
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     return render_template('search.html')
 
