@@ -1,29 +1,8 @@
-from flask import Flask, request, render_template, redirect, url_for, flash, session, request, jsonify
+from flask import Flask, request, render_template, redirect, url_for, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-import requests, json
+import json
 from pprint import pprint
-
-
-
-my_key = '8c5606f4'
-
-endpoint = 'http://www.omdbapi.com/'
-
-movie_title = input("Enter a title of a movie:") # input
-
-payload = {
-    'apikey': my_key,
-    't': movie_title, # Movie Title
-    'plot':'full'  #get exact movie
-}
-try:
-    r = requests.get(endpoint, params=payload)
-    data = r.json()
-    pprint(data)
-except:
-    print('please try again')
-# api key if you need to look up info, copy paste to browser: http://www.omdbapi.com/?i=tt3896198&apikey=8c5606f4
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -45,6 +24,30 @@ class User(db.Model):
 @app.before_request
 def create_tables():
     db.create_all()
+
+
+# api
+# my_key = '8c5606f4'
+
+# endpoint = 'http://www.omdbapi.com/'
+
+# movie_title = input("Enter a title of a movie:") # input
+
+# payload = {
+#     'apikey': my_key,
+#     't': movie_title, # Movie Title
+#     'plot':'full'  #get exact movie
+# }
+# try:
+#     r = requests.get(endpoint, params=payload)
+#     data = r.json()
+#     pprint(data)
+# except:
+#     print('please try again')
+
+# api key if you need to look up info, copy paste to browser: http://www.omdbapi.com/?i=tt3896198&apikey=8c5606f4
+
+
 
 @app.route('/')
 def index():
@@ -95,9 +98,28 @@ def home():
         flash("User not found, please log in again.")
         return redirect(url_for('logout'))
 #
+
+
+import requests
+from flask import request
+
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    return render_template('search.html')
+    if request.method == 'POST':
+        movie_title = request.form['title']
+        api_key = '8c5606f4'
+        response = requests.get(f'http://www.omdbapi.com/?apikey={api_key}&t={movie_title}')
+        movie_data = response.json()
+        return render_template('search.html', movieData=movie_data)
+    else:
+        return render_template('search.html', movieData=None)
+
+
+@app.route('/searchInfo', methods=['GET'])
+def search_info():
+    return render_template('searchInfo.html', movieData=None)  
+
+
 
 @app.route('/profile')
 def profile():
