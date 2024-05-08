@@ -29,15 +29,29 @@
         <div class="row">
             <div class="col-12 col-md-6">
                 <div class="profile-section">
-                  <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Profile Icon" class="img-fluid mb-2" style="width: 150px; height: auto;">
+                    <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Profile Icon" class="img-fluid mb-2" style="width: 150px; height: auto;">
                     <p>Hello, {{ username }}! Welcome back.</p>
+                    
                     <p><strong>Favorite Movie:</strong> Movie Name</p>
+                    <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Favorite Movie" class="img-fluid mb-2" style="width: 150px; height: auto;">
+
                     <p><strong>Favorite Genre:</strong> Genre Name</p>
+                    <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Favorite Genre" class="img-fluid mb-2" style="width: 150px; height: auto;">
+
                     <p><strong>Honorable Mentions:</strong></p>
                     <ul>
-                        <li>Movie 1</li>
-                        <li>Movie 2</li>
-                        <li>Movie 3</li>
+                        <li>
+                            Movie 1
+                            <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Movie 1" class="img-fluid mb-2" style="width: 150px; height: auto;">
+                        </li>
+                        <li>
+                            Movie 2
+                            <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Movie 2" class="img-fluid mb-2" style="width: 150px; height: auto;">
+                        </li>
+                        <li>
+                            Movie 3
+                            <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Movie 3" class="img-fluid mb-2" style="width: 150px; height: auto;">
+                        </li>
                     </ul>
                 </div>
             </div>
