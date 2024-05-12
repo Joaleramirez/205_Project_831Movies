@@ -3,8 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from pprint import pprint
+from flask_bootstrap import Bootstrap5
+import random
 
 app = Flask(__name__)
+bootstrap = Bootstrap5(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SECRET_KEY'] = 'change_this_to_a_random_secret_key'
 app.config['SESSION_PERMANENT'] = False  # Sessions expire when the browser closes
@@ -24,28 +27,6 @@ class User(db.Model):
 @app.before_request
 def create_tables():
     db.create_all()
-
-
-# api
-# my_key = '8c5606f4'
-
-# endpoint = 'http://www.omdbapi.com/'
-
-# movie_title = input("Enter a title of a movie:") # input
-
-# payload = {
-#     'apikey': my_key,
-#     't': movie_title, # Movie Title
-#     'plot':'full'  #get exact movie
-# }
-# try:
-#     r = requests.get(endpoint, params=payload)
-#     data = r.json()
-#     pprint(data)
-# except:
-#     print('please try again')
-
-# api key if you need to look up info, copy paste to browser: http://www.omdbapi.com/?i=tt3896198&apikey=8c5606f4
 
 
 
@@ -97,22 +78,27 @@ def home():
     else:
         flash("User not found, please log in again.")
         return redirect(url_for('logout'))
-#
-
 
 import requests
-from flask import request
+from flask import request, jsonify
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
-        movie_title = request.form['title']
+        search_term = request.form['title']
         api_key = '8c5606f4'
-        response = requests.get(f'http://www.omdbapi.com/?apikey={api_key}&t={movie_title}')
+        url = f'http://www.omdbapi.com/?apikey={api_key}&s={search_term}'
+        
+        response = requests.get(url)
+        response.raise_for_status()
         movie_data = response.json()
-        return render_template('search.html', movieData=movie_data)
+        if movie_data["Response"] == "True":
+            movies = movie_data["Search"]
+            return render_template('search.html', movies=movies)
+        else:
+                return render_template('search.html', movies=None)
     else:
-        return render_template('search.html', movieData=None)
+        return render_template('search.html', movies=None)
 
 
 @app.route('/searchInfo', methods=['GET'])
