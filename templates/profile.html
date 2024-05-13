@@ -4,12 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/static/profiles.css" />
     <title>Profile Page</title>
 </head>
+
+<style>
+  .background {
+      background-image: url('{{ url_for('static', filename='background.jpg') }}');
+  }
+</style>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="nav">
         <a class="navbar-brand" href="/home">Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -25,38 +32,57 @@
       </div>
     </nav>
 
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <div class="profile-section">
-                    <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Profile Icon" class="img-fluid mb-2" style="width: 150px; height: auto;">
-                    <p>Hello, {{ username }}! Welcome back.</p>
-                    
-                    <p><strong>Favorite Movie:</strong> Movie Name</p>
-                    <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Favorite Movie" class="img-fluid mb-2" style="width: 150px; height: auto;">
-
-                    <p><strong>Favorite Genre:</strong> Genre Name</p>
-                    <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Favorite Genre" class="img-fluid mb-2" style="width: 150px; height: auto;">
-
-                    <p><strong>Honorable Mentions:</strong></p>
-                    <ul>
-                        <li>
-                            Movie 1
-                            <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Movie 1" class="img-fluid mb-2" style="width: 150px; height: auto;">
-                        </li>
-                        <li>
-                            Movie 2
-                            <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Movie 2" class="img-fluid mb-2" style="width: 150px; height: auto;">
-                        </li>
-                        <li>
-                            Movie 3
-                            <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Movie 3" class="img-fluid mb-2" style="width: 150px; height: auto;">
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+   <div class ="right-nav">      
+    <h5 class="text-center">Profile Info</h5> 
+    <div class="profile-info">
+      <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Profile Icon" class="picts" style="width: 150px; height: auto;">
+      <p>UserName: {{ username }}</p>
+      <p>Favorite Movie: StarWars</p>
+      <p>Member since: 2024</p>
+      <p>Comments: 0</p>
     </div>
+  </div>
+
+  <div class = 'list_info'>
+    <h5> Movies List</h5>
+      <div class = 'list'>
+        <p>Starwars New Hope</p>
+        <div class = 'movie_image'>
+          <img src="https://m.media-amazon.com/images/I/5146sA-WtUL._SY445_SX342_.jpg" class="img-fluid" alt="Movie Poster">
+        </div>
+        <p>Year released: 1977</p>
+        <p>Genre: SciFi</p>
+        <p>Luke Skywalker joins forces with a Jedi Knight,
+           a cocky pilot, a Wookiee and two droids to save 
+           the galaxy from the Empire's world-destroying battle 
+           station, while also attempting to rescue Princess Leia from the mysterious Darth ...</p>
+
+      </div>
+  </div>
+  <!--
+  <p><strong>Favorite Movie:</strong> Movie Name</p>
+  <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Favorite Movie" class="img-fluid mb-2" style="width: 150px; height: auto;">
+
+  <p><strong>Favorite Genre:</strong> Genre Name</p>
+  <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Favorite Genre" class="img-fluid mb-2" style="width: 150px; height: auto;">
+
+  <p><strong>Honorable Mentions:</strong></p>
+  <ul>
+      <li>
+          Movie 1
+          <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Movie 1" class="img-fluid mb-2" style="width: 150px; height: auto;">
+      </li>
+      <li>
+          Movie 2
+          <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Movie 2" class="img-fluid mb-2" style="width: 150px; height: auto;">
+      </li>
+      <li>
+          Movie 3
+          <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Movie 3" class="img-fluid mb-2" style="width: 150px; height: auto;">
+      </li>
+  </ul> 
+  -->
+  
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

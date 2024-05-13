@@ -9,10 +9,12 @@ body {
     align-items: center; 
     justify-content: center;
     height: 100vh;
-    background-image: url('{{ url_for('static', filename='background.jpg') }}');
     background-size: cover;
     background-position: center;
-}
+    /* background-image: url('{{ url_for('static', filename='background.jpg') }}'); */
+    }
+
+
 
 .animated-title {
     font-size: 75px;

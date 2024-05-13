@@ -14,7 +14,7 @@
 </head>
 <body>
 <!-- navigation bar -->
-    <link rel="stylesheet" type="text/css" href="/styles.css">
+<link rel="stylesheet" type="text/css" href="/styles.css">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
@@ -24,78 +24,67 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        
         <li class="nav-item">
           <a class="nav-link" href="/profile"> Profile </a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link" href="/searchInfo"> Search </a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link" href="/mylist">  List </a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link" href="/logout"> Logout </a>
         </li>
-
-        
       </ul>
     </div>
   </div>
 </nav>
-  <div class="container mt-5">
-    {% if movieData %}
-      <form id="movieinfo" action="/search" method="POST" autocomplete="off">
-        <div class="card">
-          <div class="card-header bg-dark text-white">
-            <h5 class="card-title">{{ movieData.Title }}
-              
-            </h5>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-4">
-                <!-- {{ movieData.Poster }} -->
-                  <img src="{{ movieData.Poster }}" class="img-fluid" alt="Movie Poster">
-                  {% else %}
-                  <p>No poster available</p>
-                  {% endif %}
-              </div>
-              <div class="col-md-8">
-                <p>Title: {{ movieData.Title }}</p>
-                <p>Year: {{ movieData.Year }}</p>
-                <p>Rated: {{ movieData.Rated }}</p>
-                <p>Runtime: {{ movieData.Runtime }}</p>
-                <p>Genre: {{ movieData.Genre }}</p>
-                <p>Plot:</p>
-                <p>{{ movieData.Plot }}</p>
-                <p>Directed by: {{ movieData.Director }}</p>
-                <p>Starring: {{ movieData.Actors }}</p>
-                <button class="btn btn-primary">Save To List</button>
-              </div>
+
+<div class="container mt-5">
+  {% if movieData %}
+    <form id="movieinfo" action="/search" method="POST" autocomplete="off">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="card-title">{{ movieData.Title }}</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <!-- {{ movieData.Poster }} -->
+              <img src="{{ movieData.Poster }}" class="img-fluid" alt="Movie Poster">
+            </div>
+            <div class="col-md-8">
+              <p>Title: {{ movieData.Title }}</p>
+              <p>Year: {{ movieData.Year }}</p>
+              <p>Rated: {{ movieData.Rated }}</p>
+              <p>Runtime: {{ movieData.Runtime }}</p>
+              <p>Genre: {{ movieData.Genre }}</p>
+              <p>Plot:</p>
+              <p>{{ movieData.Plot }}</p>
+              <p>Directed by: {{ movieData.Director }}</p>
+              <p>Starring: {{ movieData.Actors }}</p>
+              <button class="btn btn-primary">Save To List</button>
             </div>
           </div>
         </div>
-        <input type="hidden" name="title" readonly="readonly" value="{{ movieData.Title }}">
-        <input type="hidden" name="year" readonly="readonly" value="{{ movieData.Year }}">
-        <input type="hidden" name="rated" readonly="readonly" value="{{ movieData.Rated }}">
-        <input type="hidden" name="runtime" readonly="readonly" value="{{ movieData.Runtime }}">
-        <input type="hidden" name="poster" readonly="readonly" value="{{ movieData.Poster }}">
-        <input type="hidden" name="genre" readonly="readonly" value="{{ movieData.Genre }}">
-        <textarea name="plot" readonly="readonly" rows="4" cols="50" style="display: none;">{{ movieData.Plot }}</textarea>
-        <input type="hidden" name="director" readonly="readonly" value="{{ movieData.Director }}">
-        <input type="hidden" name="actor" readonly="readonly" value="{{ movieData.Actors }}">
-        
-      </form>
-    <% } else { %>
-      <div class="alert alert-warning" role="alert">
-        No movie found.
       </div>
-    <% } %>
-  </div>
+      <input type="hidden" name="title" readonly="readonly" value="{{ movieData.Title }}">
+      <input type="hidden" name="year" readonly="readonly" value="{{ movieData.Year }}">
+      <input type="hidden" name="rated" readonly="readonly" value="{{ movieData.Rated }}">
+      <input type="hidden" name="runtime" readonly="readonly" value="{{ movieData.Runtime }}">
+      <input type="hidden" name="poster" readonly="readonly" value="{{ movieData.Poster }}">
+      <input type="hidden" name="genre" readonly="readonly" value="{{ movieData.Genre }}">
+      <textarea name="plot" readonly="readonly" rows="4" cols="50" style="display: none;">{{ movieData.Plot }}</textarea>
+      <input type="hidden" name="director" readonly="readonly" value="{{ movieData.Director }}">
+      <input type="hidden" name="actor" readonly="readonly" value="{{ movieData.Actors }}">
+    </form>
+  {% else %}
+    <div class="alert alert-warning" role="alert">
+      No movie found.
+    </div>
+  {% endif %}
+</div>
 
 </body>
 </html>
