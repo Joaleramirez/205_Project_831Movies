@@ -3,11 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from pprint import pprint
-from flask_bootstrap import Bootstrap5
+#from flask_bootstrap import Bootstrap5
 import random
 
 app = Flask(__name__)
-bootstrap = Bootstrap5(app)
+#bootstrap = Bootstrap5(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SECRET_KEY'] = 'change_this_to_a_random_secret_key'
 app.config['SESSION_PERMANENT'] = False  # Sessions expire when the browser closes
@@ -27,8 +27,6 @@ class User(db.Model):
 @app.before_request
 def create_tables():
     db.create_all()
-
-
 
 @app.route('/')
 def index():
@@ -68,16 +66,32 @@ def register():
             flash('Username already exists.')
     return render_template('register.html')
 
+import requests
+
 @app.route('/home')
 def home():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     user = User.query.get(session['user_id'])
     if user:
-        return render_template('home.html', username=user.username)
+        # Get page number from query string, default to 1 if not specified
+        page = request.args.get('page', 1, type=int)
+        url = f"https://api.themoviedb.org/3/movie/popular?api_key=bc0a9f528ecc7909caaacd6c9181149d&language=en-US&page={page}"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            movies = response.json().get('results', [])
+            total_pages = response.json().get('total_pages', 1)
+            if not movies:
+                flash("No movies found.")
+            return render_template('home.html', username=user.username, movies=movies, current_page=page, total_pages=total_pages)
+        else:
+            flash("Failed to fetch movies from API.")
+            return render_template('home.html', username=user.username, movies=[])
     else:
         flash("User not found, please log in again.")
         return redirect(url_for('logout'))
+
 
 import requests
 from flask import request, jsonify
