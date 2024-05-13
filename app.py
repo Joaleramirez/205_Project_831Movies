@@ -2,9 +2,13 @@ from flask import Flask, request, render_template, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
+import os
 from pprint import pprint
+from dotenv import load_dotenv
 #from flask_bootstrap import Bootstrap5
 import random
+
+load_dotenv()
 
 app = Flask(__name__)
 #bootstrap = Bootstrap5(app)
@@ -12,6 +16,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SECRET_KEY'] = 'change_this_to_a_random_secret_key'
 app.config['SESSION_PERMANENT'] = False  # Sessions expire when the browser closes
 db = SQLAlchemy(app)
+
+APIKEY = os.getenv('TMDB_API_KEY')
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -74,9 +80,8 @@ def home():
         return redirect(url_for('login'))
     user = User.query.get(session['user_id'])
     if user:
-        # Get page number from query string, default to 1 if not specified
         page = request.args.get('page', 1, type=int)
-        url = f"https://api.themoviedb.org/3/movie/popular?api_key=bc0a9f528ecc7909caaacd6c9181149d&language=en-US&page={page}"
+        url = f"https://api.themoviedb.org/3/movie/popular?api_key={APIKEY}&language=en-US&page={page}"
         response = requests.get(url)
 
         if response.status_code == 200:
