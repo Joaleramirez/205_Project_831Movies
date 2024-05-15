@@ -5,6 +5,8 @@ import json
 import os
 from pprint import pprint
 from dotenv import load_dotenv
+from flask_migrate import Migrate
+
 #from flask_bootstrap import Bootstrap5
 import random
 
@@ -16,6 +18,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SECRET_KEY'] = 'change_this_to_a_random_secret_key'
 app.config['SESSION_PERMANENT'] = False  # Sessions expire when the browser closes
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 APIKEY = os.getenv('TMDB_API_KEY')
 
@@ -23,6 +26,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
+    name = db.Column(db.String(80), nullable=True)
+    bio = db.Column(db.Text, nullable=True)
+    favorite_movie = db.Column(db.String(200), nullable=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -173,18 +179,22 @@ def search_info():
     return render_template('searchInfo.html', movieData=None)  
 
 
-
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     user = User.query.get(session['user_id'])
-    if user:
-        return render_template('profile.html', username=user.username)
-    else:
-        flash("User not found, please log in again.")
-        return redirect(url_for('logout'))
+    if request.method == 'POST':
+        user.name = request.form.get('name')
+        user.bio = request.form.get('bio')
+        user.favorite_movie = request.form.get('favorite_movie')
+
+        db.session.commit()
+        flash('Profile updated successfully!')
+        return redirect(url_for('profile'))
     
+    movies = Movie.query.filter_by(user_id=user.id).all()
+    return render_template('profile.html', username=user.username, name=user.name, bio=user.bio, favorite_movie=user.favorite_movie, movies=movies)
 
 @app.route('/mylist')
 def mylist():
