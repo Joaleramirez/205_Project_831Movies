@@ -13,9 +13,57 @@
             max-width: 600px;
             margin: 0 auto;
         }
+
+        .profile-container {
+          position: relative;
+        }
+
+        .right-nav {
+            position: absolute;
+            top: 40px; /* Adjust as needed */
+            right: 10%; /* Adjust as needed */
+            width: 200px; /* Adjust as needed */
+            text-align: center;
+            border-radius: 5px;
+            border: 2px solid black;
+        }
+
+        .info{
+          text-align: left;
+          padding:10px;
+        }
+
+        .list_info {
+
+            top: 39%;
+            left: 10%;
+            width: 200px; 
+            height: auto;
+            margin-top: 10vh;
+            transform: translate(-50%, -50%);
+
+            display:flex;
+            position: absolute;
+            align-items:center;
+            text-align: left;
+            flex-direction: column;
+            justify-content: flex-start;
+            border-radius: 5px;
+            border: 2px solid black;
+        }
+
+        .movie_image{
+          align-content: center;
+          padding: 20px;
+          
+        }
+        .padding{
+          padding:10px;
+        }
+
     </style>
 </head>
-<body>
+<body class ="main">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="/home">Home</a>
@@ -41,6 +89,43 @@
   </div>
 </nav>
 
+<div class="profile-container">
+  <div class ="right-nav">      
+    <h5>Profile Info</h5>
+      <div class="profile-info">
+          <div class = "image">
+            <img src="{{ url_for('static', filename='profile_pic.png') }}" alt="Profile Icon" class="picts" style="width: 150px; height: auto;">
+          </div>
+        <div class ="info">
+          <p>User Name: {{ username }}</p>
+          <p>Favorite Movie: StarWars</p>
+          <p>Member since: 2024</p>
+          <p>Comments: 0</p>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+<div class = 'list_info'>
+  <h5> Movie of the Day</h5>
+  <p>Starwars New Hope</p>
+    <div class = 'list'>
+      <div class = 'movie_image'>
+        <img src="https://m.media-amazon.com/images/I/5146sA-WtUL._SY445_SX342_.jpg" class="img-fluid" alt="Movie Poster">
+      </div>
+        <div class = "padding">
+          <p>Year released: 1977</p>
+          <p>Genre: SciFi</p>
+          <p>Luke Skywalker joins forces with a Jedi Knight,
+            a cocky pilot, a Wookiee and two droids to save 
+            the galaxy from the Empire's world-destroying battle 
+            station, while also attempting to rescue Princess Leia from the mysterious Darth ...
+          </p>
+        </div>
+    </div>
+</div>
+
 <div class="container mt-5">
     <div class="text-center">
         <img src="{{ url_for('static', filename='profile_pic.png') }}" class="img-thumbnail" alt="Profile Picture">
@@ -64,6 +149,7 @@
         </div>
     </div>
 </div>
+
 
 </body>
 </html>
