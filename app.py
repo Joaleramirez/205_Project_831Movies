@@ -21,6 +21,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 APIKEY = os.getenv('TMDB_API_KEY')
+TMDB_API_KEY = 'bc0a9f528ecc7909caaacd6c9181149d'
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -98,7 +99,7 @@ def home():
     user = User.query.get(session['user_id'])
     if user:
         page = request.args.get('page', 1, type=int)
-        url = f"https://api.themoviedb.org/3/movie/popular?api_key={APIKEY}&language=en-US&page={page}"
+        url = f"https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=en-US&page={page}"
         response = requests.get(url)
 
         if response.status_code == 200:
