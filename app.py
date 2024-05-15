@@ -30,6 +30,17 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+class Movie(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    movie_id = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    poster_path = db.Column(db.String(200), nullable=False)
+    overview = db.Column(db.Text, nullable=True)
+
+    user = db.relationship('User', backref=db.backref('movies', lazy=True))
+
+
 @app.before_request
 def create_tables():
     db.create_all()
@@ -96,7 +107,44 @@ def home():
     else:
         flash("User not found, please log in again.")
         return redirect(url_for('logout'))
+    
+@app.route('/add_to_list', methods=['POST'])
+def add_to_list():
+    if 'user_id' not in session:
+        return jsonify({"success": False, "message": "User not logged in"}), 401
+    
+    user_id = session['user_id']
+    movie_id = request.form['movie_id']
+    title = request.form['title']
+    poster_path = request.form['poster_path']
+    overview = request.form.get('overview')
 
+    # Check if the movie is already in the user's list
+    existing_movie = Movie.query.filter_by(user_id=user_id, movie_id=movie_id).first()
+    if existing_movie:
+        return jsonify({"success": False, "message": "Movie already in list"}), 400
+
+    new_movie = Movie(user_id=user_id, movie_id=movie_id, title=title, poster_path=poster_path, overview=overview)
+    db.session.add(new_movie)
+    db.session.commit()
+
+    return jsonify({"success": True, "message": "Movie added to list"}), 200
+
+@app.route('/delete_from_list', methods=['POST'])
+def delete_from_list():
+    if 'user_id' not in session:
+        return jsonify({"success": False, "message": "User not logged in"}), 401
+
+    movie_id = request.form['movie_id']
+    user_id = session['user_id']
+    
+    movie = Movie.query.filter_by(user_id=user_id, movie_id=movie_id).first()
+    if movie:
+        db.session.delete(movie)
+        db.session.commit()
+        return jsonify({"success": True, "message": "Movie deleted from list"}), 200
+    else:
+        return jsonify({"success": False, "message": "Movie not found in list"}), 404
 
 import requests
 from flask import request, jsonify
@@ -140,7 +188,16 @@ def profile():
 
 @app.route('/mylist')
 def mylist():
-    return render_template('mylist.html')
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user = User.query.get(session['user_id'])
+    if user:
+        movies = Movie.query.filter_by(user_id=user.id).all()
+        return render_template('mylist.html', movies=movies)
+    else:
+        flash("User not found, please log in again.")
+        return redirect(url_for('logout'))
+
 
 @app.route('/logout')
 def logout():

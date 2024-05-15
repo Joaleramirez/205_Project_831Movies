@@ -40,33 +40,71 @@
         <p>Hello, {{ username }}! Start your day with a Popular Movie.</p>
     </div>
 
-<!-- Displaying movies -->
-<div class="row mt-4">
-  {% for movie in movies %}
-  <div class="col-md-4">
-      <div class="card mb-4 shadow-sm">
-          <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="card-img-top" alt="Movie Poster">
-          <div class="card-body">
-              <h5 class="card-title">{{ movie.title }}</h5>
-              <p class="card-text">{{ movie.overview }}</p>
-          </div>
-      </div>
-  </div>
-  {% endfor %}
+    <!-- Displaying movies -->
+    <div class="row mt-4">
+        {% for movie in movies %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="card-img-top" alt="Movie Poster">
+                <div class="card-body">
+                    <h5 class="card-title">{{ movie.title }}</h5>
+                    <p class="card-text">{{ movie.overview }}</p>
+                    <button class="btn btn-primary add-to-list" data-movie-id="{{ movie.id }}" data-title="{{ movie.title }}" data-poster-path="{{ movie.poster_path }}" data-overview="{{ movie.overview }}">Add to List</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Movie navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item {% if current_page <= 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for('home', page=current_page-1) }}" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item {% if current_page >= total_pages %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for('home', page=current_page+1) }}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
-<!-- Pagination -->
-<nav aria-label="Movie navigation">
-  <ul class="pagination justify-content-center">
-      <li class="page-item {% if current_page <= 1 %}disabled{% endif %}">
-          <a class="page-link" href="{{ url_for('home', page=current_page-1) }}" tabindex="-1" aria-disabled="true">Previous</a>
-      </li>
-      <li class="page-item {% if current_page >= total_pages %}disabled{% endif %}">
-          <a class="page-link" href="{{ url_for('home', page=current_page+1) }}">Next</a>
-      </li>
-  </ul>
-</nav>
-</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.add-to-list');
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            const movieId = this.getAttribute('data-movie-id');
+            const title = this.getAttribute('data-title');
+            const posterPath = this.getAttribute('data-poster-path');
+            const overview = this.getAttribute('data-overview');
+            fetch('/add_to_list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'movie_id': movieId,
+                    'title': title,
+                    'poster_path': posterPath,
+                    'overview': overview
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Movie added to list!');
+                } else {
+                    alert('Failed to add movie to list.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+});
+</script>
 
 </body>
 </html>
